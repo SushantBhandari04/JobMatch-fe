@@ -55,6 +55,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/signin`, {
         email,
         password
+      },{
+        withCredentials: true
       });
 
       if (!response) {
@@ -88,7 +90,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         password,
         name
       },{
-        "withCredentials": true
+        withCredentials: true
       });
 
       if (!response) {
