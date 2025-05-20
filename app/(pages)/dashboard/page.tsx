@@ -205,7 +205,7 @@ export default function DashboardPage() {
                   </div>
                   <h3 className="text-xl font-semibold mb-2">No recommendations yet</h3>
                   <p className="text-muted-foreground max-w-md mx-auto mb-6">
-                    Click the "Find My Matches" button to get AI-powered job recommendations based on your profile.
+                    Click the &quot;Find My Matches&quot; button to get AI-powered job recommendations based on your profile.
                   </p>
                 </div>
               )}
