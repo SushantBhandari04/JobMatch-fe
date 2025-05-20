@@ -87,6 +87,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         email,
         password,
         name
+      },{
+        "withCredentials": true
       });
 
       if (!response) {
