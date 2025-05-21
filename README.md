@@ -1,40 +1,121 @@
-<<<<<<< HEAD
-# JobMatch-fe
-=======
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# JobMatch Frontend (`fe`)
 
-## Getting Started
+JobMatch is an AI-powered job matching platform that recommends jobs to users based on their profile, skills, and preferences. The frontend (`fe`) is built with Next.js and React, providing a modern, responsive user interface for job seekers.
 
-First, run the development server:
+---
 
-```bash
+## 🚀 Setup Instructions
+
+### Prerequisites
+
+- Node.js (v18+ recommended)
+- npm or yarn
+
+### 1. Clone the Repository
+
+```sh
+git clone https://github.com/SushantBhandari04/JobMatch-fe.git
+```
+
+### 2. Environment Variables
+
+Copy the example environment file and fill in your backend URL:
+
+```sh
+cp .env.example .env
+```
+
+**`.env` example:**
+```
+NEXT_PUBLIC_BACKEND_URL=http://localhost:3001
+```
+- For local development, use your local backend URL.
+- For production, set this to your deployed backend API URL.
+
+### 3. Install Dependencies
+
+```sh
+npm install
+# or
+yarn install
+```
+
+### 4. Start the Frontend
+
+```sh
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🧠 How the Frontend Uses AI
 
-## Learn More
+- **Profile Creation:** Users create detailed profiles including skills, experience, and preferences.
+- **Job Recommendations:** When a user requests recommendations, the frontend sends their profile to the backend, which uses AI embeddings and vector search to find the best job matches.
+- **Real-Time Updates:** As users update their profiles, recommendations are refreshed in real time.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🖥️ Main Features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Authentication:** Sign up, sign in, and JWT-based session management.
+- **Profile Management:** Create and update a rich user profile.
+- **Job Browsing:** Browse all available jobs with filters for type, experience, and remote options.
+- **AI Recommendations:** Get personalized job matches powered by AI.
+- **Responsive UI:** Built with Next.js, React, and shadcn/ui for a modern look and feel.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📚 API Usage
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
->>>>>>> ecb1e90 (Added fe)
+The frontend communicates with the backend via REST API endpoints.  
+Set `NEXT_PUBLIC_BACKEND_URL` in your `.env` to point to your backend.
+
+**Key endpoints:**
+- `POST /signup` — Register a new user
+- `POST /signin` — Login and receive JWT
+- `POST /profile/create` — Create or update user profile (requires JWT)
+- `GET /profile` — Get current user's profile (requires JWT)
+- `GET /jobs` — List all jobs (with optional filters)
+- `GET /jobs/match` — Get job recommendations for the current user (requires JWT)
+
+All protected routes require the `Authorization` header with a valid JWT.
+
+---
+
+## 🏗️ Code Structure
+
+```
+fe/
+├── app/                # Next.js app directory (pages, layouts, routes)
+├── components/         # Shared UI components (buttons, forms, etc.)
+├── contexts/           # React contexts (e.g., authentication)
+├── hooks/              # Custom React hooks
+├── styles/             # Global and component styles
+├── public/             # Static assets
+├── .env.example        # Example environment variables
+├── README.md           # This file
+└── ...
+```
+
+---
+
+## ⚖️ Trade-offs & Assumptions
+
+- **API Dependency:** The frontend expects the backend to be running and accessible at the URL specified in `NEXT_PUBLIC_BACKEND_URL`.
+- **JWT Storage:** JWT tokens are stored in localStorage for simplicity; consider more secure storage for production.
+- **CORS:** The backend must allow CORS for the frontend's domain.
+- **Preview Deployments:** For Vercel preview deployments, ensure backend CORS allows dynamic preview URLs.
+
+---
+
+## 📝 Assumptions
+
+- Users will provide accurate and detailed profile information for best recommendations.
+- The backend is responsible for all AI, authentication, and data storage logic.
+- The frontend is stateless except for authentication and UI state.
+
+---
