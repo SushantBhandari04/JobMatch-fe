@@ -55,6 +55,14 @@ export default function DashboardPage() {
             Authorization: token,
           },
         });
+
+
+        const profileData = userProfileResponse.data as { profile?: any };
+        if (!profileData.profile) {
+          toast("Profile not found");
+          router.push('/profile/create');
+          return;
+        }
       }catch{
         toast("Profile not found");
         router.push('/profile/create');
@@ -64,7 +72,7 @@ export default function DashboardPage() {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/job-matches`, {
         headers: {
           Authorization: token,
-        },
+        }
       });
 
       const jobs = response.data; // assuming API returns top Jobs

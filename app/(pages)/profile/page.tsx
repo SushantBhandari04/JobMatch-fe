@@ -2,13 +2,16 @@
 
 import { AppFooter } from "@/components/layout/app-footer";
 import { AppHeader } from "@/components/layout/app-header";
+import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/auth-context";
 import axios from "axios";
+import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
+import { set } from "zod";
 
 export default function ProfilePage() {
   const { user } = useAuth();
-  const { data: profile } = useUserProfile(user?.id);
+  const { data: profile, loading } = useUserProfile(user?.id);
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
@@ -21,13 +24,15 @@ export default function ProfilePage() {
           </div>
 
           <div className="rounded-2xl border shadow-sm bg-card p-6 space-y-4">
+
+            {/* User Information */}
+            <Section title="User Information">
+              <Info label="Email" value={user?.email as string} />
+              <Info label="Username" value={user?.name as string} />
+            </Section>
+
             {profile ? (
               <>
-                {/* User Information */}
-                <Section title="User Information">
-                  <Info label="Email" value={user?.email as string} />
-                  <Info label="Username" value={user?.name as string} />
-                </Section>
 
                 {/* Professional Info */}
                 <Section title="Professional Details">
@@ -77,8 +82,17 @@ export default function ProfilePage() {
                   <p>Last updated: {new Date(profile.updatedAt).toLocaleString()}</p>
                 </div>
               </>
-            ) : (
+            ) : loading ? (
               <p className="text-center text-muted-foreground">Loading profile...</p>
+            ) : (
+              <div className="text-center flex flex-col gap-8 items-center">
+                <p className="text-center text-muted-foreground">No profile found.</p>
+                <Button
+                  onClick={() => { redirect("/profile/create"); }}
+                  className="shrink-0 cursor-pointer"
+                  disabled={loading}
+                >Create Profile</Button>
+              </div>
             )}
           </div>
         </div>
@@ -106,12 +120,16 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-function useUserProfile(id: string | undefined): { data: any } {
+function useUserProfile(id: string | undefined): { data: any, loading: boolean } {
   const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+
 
   useEffect(() => {
+    setLoading(true);
     if (!id) {
       setData(null);
+      setLoading(false);
       return;
     }
 
@@ -124,9 +142,16 @@ function useUserProfile(id: string | undefined): { data: any } {
             Authorization: token,
           },
         });
-        if (!cancelled) setData(res.data);
+        const data = res.data as { profile?: any };
+        if (!data.profile) {
+          setData(null);
+          return;
+        }
+        if (!cancelled) setData(data.profile);
       } catch (err) {
         console.error("Failed to fetch profile:", err);
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -136,5 +161,5 @@ function useUserProfile(id: string | undefined): { data: any } {
     };
   }, [id]);
 
-  return { data };
+  return { data, loading };
 }

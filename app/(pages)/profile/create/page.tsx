@@ -137,9 +137,12 @@ export default function CreateProfilePage() {
           { headers: { Authorization: token } }
         );
 
-        if (res.data) {
+        // console.log("Profile data:", res.data);
+
+        const data = res.data as { profile?: any }; // type assertion to allow property access
+        if (data.profile) {
           setHasProfile(true);
-          form.reset(res.data); // set form values
+          form.reset(data.profile); // set form values
         }
       } catch (err) {
         console.log("No existing profile found.");

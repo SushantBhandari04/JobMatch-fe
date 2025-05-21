@@ -52,6 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string) => {
     setIsLoading(true);
     try {
+      localStorage.removeItem('recommended_jobs');
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/signin`, {
         email,
         password
